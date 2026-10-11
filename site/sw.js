@@ -4,7 +4,7 @@
 // and a cached copy exists, the cached copy is shown and the network answer still updates the cache; offline,
 // the cached copy is used. Cross-origin requests (publisher images) are untouched.
 // (Cache-first was tried on 2026-10-04: pages opened at once, but changes took two or more opens to appear.)
-const CACHE = "daybreak-v3";
+const CACHE = "daybreak-v4";
 const NETWORK_WAIT_MS = 2500;
 const SHELL = ["./", "index.html", "app.css", "app.js", "lib.js", "fallback.js", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "fonts/fraunces-latin.woff2", "fonts/public-sans-latin.woff2"];
 
@@ -30,6 +30,13 @@ self.addEventListener("fetch", (e) => {
   });
   e.waitUntil(network.catch(() => {}));
   const cached = () => caches.match(req, { ignoreSearch: true });
+  // The stories never take the slow-network shortcut: a cached news.json shown after 2.5 s is the copy from the
+  // last visit, which can be days old, and the page (and its refresh button) took it as the latest. On a slow
+  // phone connection that made the news look stuck (2026-10-11). It falls back to the cache only when offline.
+  if (new URL(req.url).pathname.endsWith("/news.json")) {
+    e.respondWith(network.catch(() => cached().then((c) => c ?? Response.error())));
+    return;
+  }
   const slow = new Promise((resolve) => setTimeout(resolve, NETWORK_WAIT_MS)).then(cached);
   e.respondWith(
     Promise.race([network, slow.then((c) => c ?? network)]).catch(() => cached().then((c) => c ?? Response.error())),

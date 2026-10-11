@@ -9,7 +9,7 @@ Top news on your phone, in seven sections: World, US, India, Tech, Business, Hea
 - **Top News**, a front page laid out like a newspaper: the day's biggest story from World, US or India leads, then the top three headlines from every section, in the same order as the tabs. Tap a section's name to open it. The app always opens here.
 - The latest headlines from several publishers in each section, with a short summary, how long ago it was published, and a picture where the publisher provides one. Tapping a story opens it on the publisher's own site.
 - Dark and light themes that follow your phone's setting.
-- Works offline with the last stories it loaded, and on a slow connection shows them after a couple of seconds instead of waiting.
+- Works offline with the last stories it loaded. On a slow connection the page itself opens after a couple of seconds, but it always waits for the latest stories rather than showing old ones as new.
 - New stories every hour, at half past. The page also reloads them when you come back to it after a while, and there's a refresh button.
 - Optional AI help: a relevance check for the country tabs (US and India), duplicate grouping, and plain "What it's about" lines for clickbait headlines (see below).
 
