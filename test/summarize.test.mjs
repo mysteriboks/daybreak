@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { cleanSummary, geminiCaller, summarizeSections, HaltSummaries, eligible } from "../scripts/summarize.mjs";
-import { setOverloadRetries } from "../scripts/gemini.mjs";
+import { setOverloadRetries, resetGeminiBreaker } from "../scripts/gemini.mjs";
 
 const LONG = "A description long enough to be worth summarizing, with plenty of detail beyond the headline itself.";
 const item = (n, over = {}) => ({ title: `Headline ${n}`, snippet: LONG, url: `https://a.example/${n}`, source: "A", publishedAt: n, clickbait: true, ...over });
@@ -92,6 +92,28 @@ test("generate: an overload (503/500) is retried; the build-wide retry budget st
     await assert.rejects(geminiCaller({ apiKey: "k", baseUrl, minIntervalMs: 0, retryDelayMs: 0 })(item(1)));
     assert.equal(seen.length, 1, "budget spent: no retry");
   });
+  setOverloadRetries(6);
+});
+
+test("generate: after repeated failures, or once the time budget is spent, the build makes no more AI calls", async () => {
+  setOverloadRetries(0);
+  resetGeminiBreaker({ maxFailuresInARow: 2 });
+  await withGemini((req, res) => { res.statusCode = 500; res.end("{}"); }, async (baseUrl, seen) => {
+    const call = geminiCaller({ apiKey: "k", baseUrl, minIntervalMs: 0, retryDelayMs: 0 });
+    await assert.rejects(call(item(1)), (e) => !(e instanceof HaltSummaries));
+    await assert.rejects(call(item(2)), (e) => !(e instanceof HaltSummaries));
+    await assert.rejects(call(item(3)), HaltSummaries);
+    assert.equal(seen.length, 2, "the third call never reached Google");
+  });
+  resetGeminiBreaker({ budgetMs: 50 });
+  await withGemini(reply("ok"), async (baseUrl, seen) => {
+    const call = geminiCaller({ apiKey: "k", baseUrl, minIntervalMs: 0 });
+    assert.equal(await call(item(1)), "ok");
+    await new Promise((r) => setTimeout(r, 80));
+    await assert.rejects(call(item(2)), HaltSummaries);
+    assert.equal(seen.length, 1);
+  });
+  resetGeminiBreaker();
   setOverloadRetries(6);
 });
 

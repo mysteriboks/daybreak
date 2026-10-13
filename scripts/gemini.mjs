@@ -33,6 +33,7 @@ async function errorInfo(res, apiKey) {
 }
 
 const MAX_RETRY_WAIT_MS = 90_000;
+const envNumber = (name, fallback) => (process.env[name] !== undefined && process.env[name] !== "" ? Number(process.env[name]) : fallback);
 
 // 500/503 mean Google is overloaded ("This model is currently experiencing high demand"), which passes within
 // seconds to minutes: on 2026-10-09 it cost three sections their story grouping and two their ratings in one
@@ -40,9 +41,23 @@ const MAX_RETRY_WAIT_MS = 90_000;
 // a few minutes instead of running into the build's 20-minute timeout.
 let overloadRetriesLeft = 6;
 export function setOverloadRetries(n) { overloadRetriesLeft = n; }
-const envNumber = (name, fallback) => (process.env[name] !== undefined && process.env[name] !== "" ? Number(process.env[name]) : fallback);
 
-export async function generate({
+// Circuit breaker for the whole build. When Gemini is slow rather than refusing, every call runs to its
+// 30-second timeout and the build carries on to the next one: on 2026-10-13 that took a build 12 minutes
+// and held back the hourly update. After `maxFailuresInARow` failed calls, or once `budgetMs` has passed since
+// the first call, every further call halts at once and the news publishes without the remaining AI steps.
+let failuresInARow = 0;
+let firstCallAt = 0;
+let maxFailuresInARow = envNumber("GEMINI_MAX_FAILURES_IN_A_ROW", 3);
+let budgetMs = envNumber("GEMINI_TIME_BUDGET_MS", 240_000);
+export function resetGeminiBreaker(options = {}) {
+  failuresInARow = 0;
+  firstCallAt = 0;
+  maxFailuresInARow = options.maxFailuresInARow ?? envNumber("GEMINI_MAX_FAILURES_IN_A_ROW", 3);
+  budgetMs = options.budgetMs ?? envNumber("GEMINI_TIME_BUDGET_MS", 240_000);
+}
+
+async function attempt({
   apiKey, model = DEFAULT_MODEL, baseUrl = "https://generativelanguage.googleapis.com", timeoutMs = 30_000, system, user, maxOutputTokens = 200, json = false,
   minIntervalMs = envNumber("GEMINI_MIN_INTERVAL_MS", 5000), retryDelayMs = envNumber("GEMINI_RETRY_DELAY_MS", 30_000), retries = 2,
 }) {
@@ -83,5 +98,19 @@ export async function generate({
     // More calls would only repeat the failure, so these stop the run's calls.
     if ([400, 401, 403, 404, 429].includes(res.status)) throw new HaltGemini(`HTTP ${res.status}${detail}`);
     throw new Error(`HTTP ${res.status}${detail}`);
+  }
+}
+
+export async function generate(options) {
+  firstCallAt ||= Date.now();
+  if (failuresInARow >= maxFailuresInARow) throw new HaltGemini(`${failuresInARow} failed calls in a row; no more AI calls this build`);
+  if (Date.now() - firstCallAt > budgetMs) throw new HaltGemini(`AI time budget of ${Math.round(budgetMs / 60000)} min spent; no more AI calls this build`);
+  try {
+    const text = await attempt(options);
+    failuresInARow = 0;
+    return text;
+  } catch (err) {
+    if (!(err instanceof HaltGemini)) failuresInARow++;
+    throw err;
   }
 }
