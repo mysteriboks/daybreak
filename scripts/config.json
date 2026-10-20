@@ -216,18 +216,6 @@
           "url": "https://feeds.npr.org/1006/rss.xml"
         },
         {
-          "name": "MarketWatch",
-          "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories"
-        },
-        {
-          "name": "The New York Times",
-          "url": "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml"
-        },
-        {
-          "name": "The New York Times",
-          "url": "https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml"
-        },
-        {
           "name": "CNBC",
           "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
         },

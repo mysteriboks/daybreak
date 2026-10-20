@@ -94,7 +94,7 @@ cp news.json site/ && cd site && python3 -m http.server 8000
 
 ## Paywalls (checked 2026-10-20)
 
-Removed because a reader hit their paywall: The Hindu (India, cricket, football), The Economic Times (both India feeds) and The Verge (Tech). Still used with a paywall or premium tier, but readable for that reader: BBC (US visitors: dynamic paywall since June 2025), NYT and MarketWatch (Business), Wired (Tech), Times of India TOI+, Hindustan Times Premium, BusinessLine, CNBC Pro, STAT+, and the journals (Nature, Nature Medicine, The Lancet, NEJM). Check a new source's paywall before adding it.
+Removed because a reader hit their paywall: The Hindu (India, cricket, football), The Economic Times (both India feeds), The Verge (Tech), and The New York Times (Business and Economy) and MarketWatch (Business). Still used with a paywall or premium tier, but readable for that reader: BBC (US visitors: dynamic paywall since June 2025), Wired (Tech), Times of India TOI+, Hindustan Times Premium, BusinessLine, CNBC Pro, STAT+, and the journals (Nature, Nature Medicine, The Lancet, NEJM). Check a new source's paywall before adding it.
 
 ## Vetting a new source
 
@@ -104,7 +104,7 @@ Removed because a reader hit their paywall: The Hindu (India, cricket, football)
 
 ## Business sources (vetted 2026-10-03)
 
-Used: NYT Business and Economy, CNBC (top news, business, finance, earnings, energy, investing, world business), BBC, Guardian, NPR, MarketWatch top stories. The Business section requires the AI topic `economy` and importance 3 or more, which removes the personal-finance, lifestyle and misfiled stories those feeds also carry. Rejected after vetting: WSJ Markets / US Business and MarketWatch real-time / market-pulse (their feeds stopped updating about 20 months ago), Yahoo Finance (stale), Business Insider (lifestyle), Forbes (contributor blogs), Fortune (career features), The Economist (weekly), Axios and Al Jazeera (general news). NYT links may be paywalled for readers even though the feed is free.
+Used: CNBC (top news, business, finance, earnings, energy, investing, world business), BBC, Guardian, NPR (NYT and MarketWatch removed 2026-10-20 for their paywalls). The Business section requires the AI topic `economy` and importance 3 or more, which removes the personal-finance, lifestyle and misfiled stories those feeds also carry. Rejected after vetting: WSJ Markets / US Business and MarketWatch real-time / market-pulse (their feeds stopped updating about 20 months ago), Yahoo Finance (stale), Business Insider (lifestyle), Forbes (contributor blogs), Fortune (career features), The Economist (weekly), Axios and Al Jazeera (general news). NYT links may be paywalled for readers even though the feed is free.
 
 ## Health sources (vetted 2026-10-03)
 
