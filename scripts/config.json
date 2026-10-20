@@ -120,14 +120,6 @@
       "lead": true,
       "feeds": [
         {
-          "name": "The Hindu",
-          "url": "https://www.thehindu.com/news/national/feeder/default.rss",
-          "exclude": [
-            "^/news/cities/",
-            "^/news/national/(andhra-pradesh|arunachal-pradesh|assam|bihar|chhattisgarh|goa|gujarat|haryana|himachal-pradesh|jharkhand|karnataka|kerala|madhya-pradesh|maharashtra|manipur|meghalaya|mizoram|nagaland|odisha|punjab|rajasthan|sikkim|tamil-nadu|telangana|tripura|uttar-pradesh|uttarakhand|west-bengal|puducherry|jammu-and-kashmir|ladakh|chandigarh|other-states)/"
-          ]
-        },
-        {
           "name": "Times of India",
           "url": "https://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms",
           "only": [
@@ -155,14 +147,6 @@
         {
           "name": "Hindustan Times",
           "url": "https://www.hindustantimes.com/feeds/rss/business/rssfeed.xml"
-        },
-        {
-          "name": "Economic Times",
-          "url": "https://economictimes.indiatimes.com/industry/rssfeeds/13352306.cms"
-        },
-        {
-          "name": "Economic Times",
-          "url": "https://economictimes.indiatimes.com/news/economy/rssfeeds/1373380680.cms"
         },
         {
           "name": "BusinessLine",
@@ -196,10 +180,6 @@
         {
           "name": "Ars Technica",
           "url": "https://feeds.arstechnica.com/arstechnica/index"
-        },
-        {
-          "name": "The Verge",
-          "url": "https://www.theverge.com/rss/index.xml"
         },
         {
           "name": "Wired",
@@ -416,13 +396,6 @@
               ]
             },
             {
-              "name": "The Hindu Cricket",
-              "url": "https://www.thehindu.com/sport/cricket/feeder/default.rss",
-              "only": [
-                "^/sport/"
-              ]
-            },
-            {
               "name": "Hindustan Times Cricket",
               "url": "https://www.hindustantimes.com/feeds/rss/cricket/rssfeed.xml"
             },
@@ -458,13 +431,6 @@
             {
               "name": "CBS Sports Soccer",
               "url": "https://www.cbssports.com/rss/headlines/soccer/"
-            },
-            {
-              "name": "The Hindu Football",
-              "url": "https://www.thehindu.com/sport/football/feeder/default.rss",
-              "only": [
-                "^/sport/"
-              ]
             },
             {
               "name": "talkSPORT Football",

@@ -65,7 +65,7 @@ Everything you might want to change is in `scripts/config.json`:
 
 Commit a change and the site rebuilds with it.
 
-To change sources, open `scripts/config.json`. Each section lists its feeds as a name and an RSS or Atom link. Add, remove or swap feeds there, commit, and the site rebuilds. Give every section at least two feeds so one outage doesn't empty it. If every feed in a section fails at once, that section keeps showing its last published stories while the others update.
+To change sources, open `scripts/config.json`. Each section lists its feeds as a name and an RSS or Atom link. Add, remove or swap feeds there, commit, and the site rebuilds. Give every section at least two feeds so one outage doesn't empty it. Prefer outlets that are free to read: The Hindu, The Economic Times and The Verge were taken out because their stories asked readers to subscribe. If every feed in a section fails at once, that section keeps showing its last published stories while the others update.
 
 ## Good to know
 
