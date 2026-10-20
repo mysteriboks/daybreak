@@ -147,13 +147,6 @@
         {
           "name": "Hindustan Times",
           "url": "https://www.hindustantimes.com/feeds/rss/business/rssfeed.xml"
-        },
-        {
-          "name": "BusinessLine",
-          "url": "https://www.thehindubusinessline.com/feeder/default.rss",
-          "exclude": [
-            "^/news/world/"
-          ]
         }
       ],
       "classify": {
